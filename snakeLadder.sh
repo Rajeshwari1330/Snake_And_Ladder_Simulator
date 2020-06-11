@@ -1,6 +1,6 @@
+#!/bin/bash -x
 echo "Welcome to Snake and Ladder Simulator"
 
-#!bin/bash -x
 tput clear
 echo "    |100| |99| |98| |97| |96| |95| |94| |93| |92| |91|"
 echo "		 S		     S	       S	       Welcome to Snake Ladder Simulator "
@@ -42,5 +42,15 @@ start=0
 sleep 2
 
 echo "Game Starts"
-echo " "
-echo "player 1 is at 0 now"
+echo "           "
+echo "Player 1 is at 0 now"
+
+sleep 2
+
+function die()
+{
+	dieValue=$((RANDOM%6 + 1))
+	echo " "
+	echo "The die value is $dieValue"
+}
+die
