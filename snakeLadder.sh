@@ -51,7 +51,6 @@ echo "Game Starts"
 echo "           "
 echo "player is at $start now"
 echo ""
-
 sleep 2
 
 function die()
@@ -64,17 +63,17 @@ function die()
 
 function ladderCheck()
 {
-for value in ${ladder[@]}
-do
+	for value in ${ladder[@]}
+	do
 	if(($value==$start))
 	then
 		echo "-----------------------"
 		echo ""
-		echo "the position is $start"
+		echo "the player is at $start"
 		echo "-----------------------"
 		echo "you got a ladder"
 		start=`expr $start + $dieValue`
-		echo "the position is $start"
+		echo "the player is at $start"
 		echo "-----------------------"
 		break
 	fi
@@ -89,12 +88,12 @@ do
 	then
 		echo "-----------------------"
 		echo ""
-		echo "the position is $start"
+		echo "the player is at $start"
 		start=`expr $start - $dieValue`
 		start=`expr $start - $dieValue`
 		echo "-----------------------"
 		echo "you got a snake"
-		echo "the position is $start"
+		echo "the player is at $start"
 		echo "-----------------------"
 		break
 	fi
@@ -114,11 +113,16 @@ do
 	if(($newStart==$start))
 	then
 		echo "-----------------------"
-		echo "You dont get any snake or ladder"
+		echo "you dont get any snake or ladder"
 		echo ""
-		echo "You are in No Play condition"
+		echo "you are in no play condition"
 		echo ""
-		echo "Player is at $start now"
+		echo "player is at $start now"
 		echo "-----------------------"
+	fi
+	if(($start<0))
+	then
+		start=0
+		echo "player is at $start"
 	fi
 done
