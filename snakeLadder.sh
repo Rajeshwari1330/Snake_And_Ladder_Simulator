@@ -37,13 +37,20 @@ ladder+=( "4" "9" "20" "28" "40" "52" "63" "74" )
 snake+=( "3" "17" "35" "45" "54" "62" "87" "93" "95" "99" )
 echo "Wait for 5 secs to see the board and read instructions"
 sleep 5
-start=0
+tput clear
 
+echo ""
+echo "GAME IS STARTTING"
+echo ""
+echo "please wait........."
 sleep 2
 
+start=0
+echo ""
 echo "Game Starts"
 echo "           "
-echo "Player 1 is at 0 now"
+echo "player is at $start now"
+echo ""
 
 sleep 2
 
@@ -51,6 +58,67 @@ function die()
 {
 	dieValue=$((RANDOM%6 + 1))
 	echo " "
-	echo "The die value is $dieValue"
+	echo "the die value is $dieValue"
 }
-die
+
+
+function ladderCheck()
+{
+for value in ${ladder[@]}
+do
+	if(($value==$start))
+	then
+		echo "-----------------------"
+		echo ""
+		echo "the position is $start"
+		echo "-----------------------"
+		echo "you got a ladder"
+		start=`expr $start + $dieValue`
+		echo "the position is $start"
+		echo "-----------------------"
+		break
+	fi
+done
+}
+
+function snakeCheck()
+{
+for value in ${snake[@]}
+do
+	if(($value==$start))
+	then
+		echo "-----------------------"
+		echo ""
+		echo "the position is $start"
+		start=`expr $start - $dieValue`
+		start=`expr $start - $dieValue`
+		echo "-----------------------"
+		echo "you got a snake"
+		echo "the position is $start"
+		echo "-----------------------"
+		break
+	fi
+done
+}
+
+while(($start<101))
+do
+	echo "press enter to roll the die"
+	read enter
+
+	die
+	start=`expr $start + $dieValue`
+	newStart=$start
+	ladderCheck
+	snakeCheck
+	if(($newStart==$start))
+	then
+		echo "-----------------------"
+		echo "You dont get any snake or ladder"
+		echo ""
+		echo "You are in No Play condition"
+		echo ""
+		echo "Player is at $start now"
+		echo "-----------------------"
+	fi
+done
