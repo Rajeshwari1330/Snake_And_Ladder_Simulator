@@ -1,6 +1,6 @@
-#!/bin/bash -x
-echo "Welcome to Snake and Ladder Simulator"
+echo " Welcome to Snake and Ladder Simulator "
 
+#!/bin/bash -x
 tput clear
 echo "    |100| |99| |98| |97| |96| |95| |94| |93| |92| |91|"
 echo "		 S		     S	       S	       Welcome to Snake Ladder Simulator "
@@ -63,8 +63,8 @@ function die()
 
 function ladderCheck()
 {
-	for value in ${ladder[@]}
-	do
+for value in ${ladder[@]}
+do
 	if(($value==$start))
 	then
 		echo "-----------------------"
@@ -124,5 +124,14 @@ do
 	then
 		start=0
 		echo "player is at $start"
+	elif(($start>100))
+	then
+		start=`expr $start - $dieValue`
+		echo "player is at same position $start"
+		echo ""
+	elif(($start==100))
+	then
+		echo "player wins"
+		exit
 	fi
 done
