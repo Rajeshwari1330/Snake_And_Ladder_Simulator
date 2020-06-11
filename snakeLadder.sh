@@ -1,8 +1,7 @@
 #!/bin/bash -x
+echo "Welcome to Snake and Ladder Simulator "
 
-echo "Welcome to Snake and Ladder Simulator"
 tput clear
-
 echo "    |100| |99| |98| |97| |96| |95| |94| |93| |92| |91|"
 echo "		 S		     S	       S	       Welcome to Snake Ladder Simulator "
 echo "------------------------------------------------------"
@@ -36,6 +35,7 @@ echo "------------------------------------------------------"
 
 ladder+=( "4" "9" "20" "28" "40" "52" "63" "74" )
 snake+=( "3" "17" "35" "45" "54" "62" "87" "93" "95" "99" )
+
 echo "Wait for 5 secs to see the board and read instructions"
 sleep 5
 tput clear
@@ -46,97 +46,178 @@ echo ""
 echo "please wait........."
 sleep 2
 
-start=0
+start1=0
+start2=0
 echo ""
 echo "Game Starts"
-echo "           "
-echo "player is at $start now"
+echo ""
+echo "player 1 is at $start1 now"
+echo ""
+echo "player 2 is at $start2 now"
 echo ""
 sleep 2
 
 function die()
 {
-dieValue=$((RANDOM%6 + 1))
-echo " "
-echo "the die value is $dieValue"
+	dieValue=$((RANDOM%6 + 1))
+	echo " "
+	echo "the die value is $dieValue"
 }
 
-
-function ladderCheck()
+function ladderCheck1()
 {
 for value in ${ladder[@]}
 do
-	if(($value==$start))
+	if(($value==$start1))
 	then
 		echo "-----------------------"
 		echo ""
-		echo "the player is at $start"
+		echo "the player 1 is at $start1"
 		echo "-----------------------"
 		echo "you got a ladder"
-		start=`expr $start + $dieValue`
-		echo "the player is at $start"
+		start1=`expr $start1 + $dieValue`
+		echo "the player 1 is at $start1"
 		echo "-----------------------"
 		break
 	fi
 done
 }
 
-function snakeCheck()
+function ladderCheck2()
+{
+for value in ${ladder[@]}
+do
+	if(($value==$start2))
+	then
+		echo "-----------------------"
+		echo ""
+		echo "the player 2 is at $start2"
+		echo "-----------------------"
+		echo "you got a ladder"
+		start2=`expr $start2 + $dieValue`
+		echo "the player 2 is at $start2"
+		echo "-----------------------"
+		break
+	fi
+done
+}
+
+function snakeCheck1()
 {
 for value in ${snake[@]}
 do
-	if(($value==$start))
+	if(($value==$start1))
 	then
 		echo "-----------------------"
 		echo ""
-		echo "the player is at $start"
-		start=`expr $start - $dieValue`
-		start=`expr $start - $dieValue`
+		echo "the player 1 is at $start1"
+		start1=`expr $start1 - $dieValue`
+		start1=`expr $start1 - $dieValue`
 		echo "-----------------------"
 		echo "you got a snake"
-		echo "the player is at $start"
+		echo "the player 1 is at $start1"
 		echo "-----------------------"
 		break
 	fi
 done
 }
 
-dieCount=0
-
-while(($start<101))
+function snakeCheck2()
+{
+for value in ${snake[@]}
 do
+	if(($value==$start2))
+	then
+		echo "-----------------------"
+		echo ""
+		echo "the player 2 is at $start2"
+		start2=`expr $start2 - $dieValue`
+		start2=`expr $start2 - $dieValue`
+		echo "-----------------------"
+		echo "you got a snake"
+		echo "the player 2 is at $start2"
+		echo "-----------------------"
+		break
+	fi
+done
+}
+
+dieCount1=0
+dieCount2=0
+
+while(($start1<101 || $start2<101))
+do
+
+	echo "-------------------------------------------FOR PLAYER 1------------------------------------------------------"
 	echo "press enter to roll the die"
 	read enter
 
-	let "dieCount=dieCount+1"
+	let "dieCount1=dieCount1+1"
 	die
-	start=`expr $start + $dieValue`
-	newStart=$start
-	ladderCheck
-	snakeCheck
-	if(($newStart==$start))
+	start1=`expr $start1 + $dieValue`
+	newStart1=$start1
+	ladderCheck1
+	snakeCheck1
+	if(($newStart1==$start1))
 	then
 		echo "-----------------------"
 		echo "you dont get any snake or ladder"
 		echo ""
 		echo "you are in no play condition"
 		echo ""
-		echo "player is at $start now"
+		echo "player 1 is at $start1 now"
 		echo "-----------------------"
 	fi
-	if(($start<0))
+	if(($start1<0))
 	then
-		start=0
-		echo "player is at $start"
-	elif(($start>100))
+		start1=0
+		echo "player 1 is at $start1"
+	elif(($start1>100))
 	then
-		start=`expr $start - $dieValue`
-		echo "player is at same position $start"
-		echo ""
-	elif(($start==100))
+		start1=`expr $start1 - $dieValue`
+		echo "player 1 is at same position $start1"
+	elif(($start1==100))
 	then
-		echo "die is rolled $dieCount times"
-		echo "player wins"
+		echo "die is rolled $dieCount1 times"
+		echo "player 1 wins"
 		exit
 	fi
+
+	echo "--------------------------------------------FOR PLAYER 2------------------------------------------------------"
+	echo "press enter to roll the die"
+	read enter
+
+	let "dieCount2=dieCount2+1"
+	die
+	start2=`expr $start2 + $dieValue`
+	newStart2=$start2
+	ladderCheck2
+	snakeCheck2
+	if(($newStart2==$start2))
+	then
+		echo "-----------------------"
+		echo "you dont get any snake or ladder"
+		echo ""
+		echo "you are in no play condition"
+		echo ""
+		echo "player 2 is at $start2 now"
+		echo "-----------------------"
+	fi
+	if(($start2<0))
+	then
+		start2=0
+		echo "player 2 is at $start2"
+	elif(($start2>100))
+	then
+		start2=`expr $start2 - $dieValue`
+		echo "player 2 is at same position $start2"
+		echo ""
+	elif(($start2==100))
+	then
+		echo "die is rolled $dieCount2 times"
+		echo "player 2 wins"
+		exit
+	fi
+
 done
+
