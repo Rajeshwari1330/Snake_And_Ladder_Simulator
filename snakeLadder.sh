@@ -2,6 +2,7 @@
 
 echo "Welcome to Snake and Ladder Simulator"
 tput clear
+
 echo "    |100| |99| |98| |97| |96| |95| |94| |93| |92| |91|"
 echo "		 S		     S	       S	       Welcome to Snake Ladder Simulator "
 echo "------------------------------------------------------"
