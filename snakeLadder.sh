@@ -1,6 +1,6 @@
-echo " Welcome to Snake and Ladder Simulator "
-
 #!/bin/bash -x
+
+echo "Welcome to Snake and Ladder Simulator"
 tput clear
 echo "    |100| |99| |98| |97| |96| |95| |94| |93| |92| |91|"
 echo "		 S		     S	       S	       Welcome to Snake Ladder Simulator "
@@ -55,9 +55,9 @@ sleep 2
 
 function die()
 {
-	dieValue=$((RANDOM%6 + 1))
-	echo " "
-	echo "the die value is $dieValue"
+dieValue=$((RANDOM%6 + 1))
+echo " "
+echo "the die value is $dieValue"
 }
 
 
@@ -100,11 +100,14 @@ do
 done
 }
 
+dieCount=0
+
 while(($start<101))
 do
 	echo "press enter to roll the die"
 	read enter
 
+	let "dieCount=dieCount+1"
 	die
 	start=`expr $start + $dieValue`
 	newStart=$start
@@ -131,6 +134,7 @@ do
 		echo ""
 	elif(($start==100))
 	then
+		echo "die is rolled $dieCount times"
 		echo "player wins"
 		exit
 	fi
