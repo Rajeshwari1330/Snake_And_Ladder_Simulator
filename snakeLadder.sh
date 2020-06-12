@@ -1,17 +1,17 @@
 #!/bin/bash -x
-tput clear
 ladder+=( "4" "9" "20" "28" "40" "52" "63" "74" )
 snake+=( "3" "17" "35" "45" "54" "62" "87" "93" "95" "99" )
-echo "GAME IS STARTTING"
-echo "Number of players u want to play"
-read player
+tput clear
+echo "GAME IS STARTING"
+start1=0
+start2=0
 echo "Game Starts"
-echo "all $player players are at 0 now"
+echo "player 1 is at $start1 now"
+echo "player 2 is at $start2 now"
 
 function die()
 {
 	dieValue=$((RANDOM%6 + 1))
-	echo ""
 	echo "the die value is $dieValue"
 }
 
@@ -19,14 +19,23 @@ function ladderCheck()
 {
 for value in ${ladder[@]}
 do
-	if(($value==$start))
+	if(($value==$start1))
 	then
-		echo "the player$playerNumber is at $start"
+		echo "the player 1 is at $start1"
 		echo "you got a ladder"
-		start=`expr $start + $dieValue`
-		echo "the player$playerNumber is at $start"
+		start1=`expr $start1 + $dieValue`
+		echo "the player 1 is at $start1"
 		break
 	fi
+	if(($value==$start2))
+        then
+		echo "the player 2 is at $start2"
+                echo "you got a ladder"
+                start2=`expr $start2 + $dieValue`
+                echo "the player 2 is at $start2"
+                break
+        fi
+
 done
 }
 
@@ -34,71 +43,87 @@ function snakeCheck()
 {
 for value in ${snake[@]}
 do
-	if(($value==$start))
+	if(($value==$start1))
 	then
-		echo "the player$playerNumber is at $start"
-		start=`expr $start - $dieValue`
-		start=`expr $start - $dieValue`
+		echo "the player 1 is at $start1"
+		start1=`expr $start1 - $dieValue`
+		start1=`expr $start1 - $dieValue`
 		echo "you got a snake"
-		echo "the player$playerNumber is at $start"
+		echo "the player 1 is at $start1"
 		break
 	fi
+	if(($value==$start2))
+        then
+                echo "the player 2 is at $start2"
+                start2=`expr $start2 - $dieValue`
+                start2=`expr $start2 - $dieValue`
+                echo "you got a snake"
+                echo "the player 2 is at $start2"
+                break
+        fi
 done
 }
 
-for((playerNumber=1;playerNumber<=player;playerNumber++))
+dieCount1=0
+dieCount2=0
+
+while(($start1<101 || $start2<101))
 do
-start=0
-dieCount=0
-echo "-------------------------------------"
-echo "starting game for player $playerNumber"
-sleep 2
-while(($start<101))
-do
-	let "dieCount=dieCount+1"
+	sleep 0.5
+	echo "-------------------------------------------FOR PLAYER 1------------------------------------------------------"
+	let "dieCount1=dieCount1+1"
 	die
-	start=`expr $start + $dieValue`
-	newStart=$start
+	start1=`expr $start1 + $dieValue`
+	newStart1=$start1
 	ladderCheck
 	snakeCheck
-	if(($newStart==$start))
+	if(($newStart1==$start1))
 	then
 		echo "you dont get any snake or ladder"
 		echo "you are in no play condition"
-		echo "player$playerNumber is at $start now"
+		echo "player 1 is at $start1 now"
 	fi
-	if(($start<0))
+	if(($start1<0))
 	then
-		start=0
-		echo "player$playerNumber is at $start"
-	elif(($start>100))
+		start1=0
+		echo "player 1 is at $start1"
+	elif(($start1>100))
 	then
-		start=`expr $start - $dieValue`
-		echo "player$playerNumber is at same position $start"
-	elif(($start==100))
+		start1=`expr $start1 - $dieValue`
+		echo "player 1 is at same position $start1"
+	elif(($start1==100))
 	then
-		echo "die is rolled $dieCount times"
-		echo "player$playerNumber game is over"
-		sleep 2
-		break
+		echo "die is rolled $dieCount1 times for player 1"
+		echo "player 1 wins"
+		exit
 	fi
-done
-players+=( "$dieCount" )
-done
-
-echo "--------------------------------------------"
-echo "for $player players after finishing the game"
-echo "each player rolled the die this much time for completing the game respectively"
-echo "${players[@]}"
-sleep 2
-
-winner=( $( printf "%s\n" "${players[@]}" | sort -n ) )
-echo "$winner is the winner player die rolled"
-for((check=0;check<$player;check++))
-do
-	if(($winner == ${players[check]}))
+	sleep 0.5
+	echo "--------------------------------------------FOR PLAYER 2------------------------------------------------------"
+	let "dieCount2=dieCount2+1"
+	die
+	start2=`expr $start2 + $dieValue`
+	newStart2=$start2
+	ladderCheck
+	snakeCheck
+	if(($newStart2==$start2))
 	then
-		echo "winner is player `expr $check + 1`"
+		echo "you dont get any snake or ladder"
+		echo "you are in no play condition"
+		echo "player 2 is at $start2 now"
+	fi
+	if(($start2<0))
+	then
+		start2=0
+		echo "player 2 is at $start2"
+	elif(($start2>100))
+	then
+		start2=`expr $start2 - $dieValue`
+		echo "player 2 is at same position $start2"
+	elif(($start2==100))
+	then
+		echo "die is rolled $dieCount2 times for palyer 2"
+		echo "player 2 wins"
+		exit
 	fi
 done
 
